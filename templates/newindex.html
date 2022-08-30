@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Summarize PDF Files</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+      Dropzone.options.myDropzone = {
+
+
+      // Prevents Dropzone from uploading dropped files immediately
+        autoProcessQueue: false,
+        
+        maxFiles: 1,
+        timeout: 0,
+        init: function() {
+          myDropzone = this; // closure
+
+          this.element.querySelector("button[type=submit]").addEventListener("click", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            myDropzone.processQueue();
+          });
+
+          this.on("addedfile", function(file) {
+            if (this.files.length > 1) {
+              this.removeFile(this.files[0]);
+            }
+          });
+
+    	  this.on("queuecomplete", function(file) {
+            window.location.href="upload";
+          });
+
+        }
+      };
+
+      $(document).ready(function() {
+        var max_fields = 10;
+        var wrapper = $(".container1");
+        var add_button = $(".add_form_field");
+
+        var x = 1;
+        $(add_button).click(function(e) {
+          e.preventDefault();
+          if (x < max_fields) {
+            x++;
+            $(wrapper).append('<div><input type="text" name="myText" /><a href="#" class="delete">Delete</a></div>'); //add input box
+          } else {
+            alert('You Reached the limits')
+          }
+        });
+
+        $(wrapper).on("click", ".delete", function(e) {
+          e.preventDefault();
+          $(this).parent('div').remove();
+          x--;
+        })
+      });
+    </script>
+
+    <style>
+      .dropzone {
+        box-shadow: 0px 2px 20px 0px #f2f2f2;
+        border: 1px dashed #c0ccda;
+        padding: 60x;
+        border-radius: 10px;
+        background-color: #fbfdff;
+        margin-left: 15px;
+        margin-bottom: 15px;
+        margin-top: 15px;
+      }
+
+    </style>
+  </head>
+
+  <body>
+   <section class="bg-light mt-5">
+    <div class="container"></div>
+     <div class="row">
+      <div class="col-lg-8 offset-lg-2">
+       <div class="form-wrapper py-5">
+        <form action="/" class="dropzone" id="my-dropzone" method="POST">
+           <div class="dz-message" data-dz-message><span>Drop PDF File to Summarize</span></div>
+           <div class="form-group">
+             <label for="start">Enter the page number from where summary needs to be extracted : </label>
+             <input type="number" name="start" id="start" placeholder="Enter starting page number" class="form-control" />
+           </div>
+           <div class="form-group">
+             <label for="end">Enter the page number till where summary needs to be extracted : </label>
+             <input type="number" name="end" id="end" placeholder="Enter ending page number" class="form-control" />
+           </div>
+           <div class="form-group">
+             <label for="header">Enter the header of the document that has to be excluded from the summary : </label>
+             <input type="text" name="header" id="header" placeholder="Enter header" class="form-control" required/>
+           </div>
+           <div class="form-group">
+             <h4><strong>Please choose the footer type from the following:</strong></h4>
+             <input type="radio" id="noFooter" name="choice" value="1" checked />
+             <label for="noFooter" style="font-weight: normal">No Footer</label><br>
+        
+             <input type="radio" id="normalFooter" name="choice" value="2" />
+             <label for="normalFooter" style="font-weight: normal">1 2 ...</label><br>
+        
+             <input type="radio" id="Page 1" name="choice" value="3" />
+             <label for="Page 1" style="font-weight: normal">Page 1</label><br>
+        
+             <input type="radio" id="Page 1 of 9" name="choice" value="4" />
+             <label for="Page 1 of 9" style="font-weight: normal">Page 1 of 9</label><br>
+           </div>
+           <h3><strong>Are there any other words that need to be excluded</h3><h4>If yes, enter those lines one by one : </h4></strong></h4>
+           <div class="form-group">
+             <div class="container1">
+               <button class="add_form_field">Add New Field &nbsp; 
+                 <span style="font-size:16px; font-weight:bold;">+ </span>
+               </button>
+               <div><input type="text" name="myText" /></div>
+             </div>
+           </div>
+           <div class="form-group">
+             <button type="submit" class="btn btn-success">SUMMARIZE</button>
+           </div>
+           
+        </form>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section>
+  </body>
+</html>
