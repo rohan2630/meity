@@ -1,0 +1,29 @@
+--> In just over a year, there have been starling ai enabled innovations in biotechnology and medicine, self-driving systems, surveillance, natural language processing to name a few.
+
+--> The role of ai in advancing and mitigating the effects of disinformation has serious implications on the changing threat landscape of information security.
+
+--> A combination of bots that amplify such content at scale; ai algorithms that are used to target specific user base and amplify existing biases; and a lack of a robust framework to detect and penalize creation and dissemination of manipulated content; enable scalable, efficient and widespread propaganda.
+
+--> Examples of synthetic media includes: deep fakes -uses deep learning algorithms where an individual in an image or a video is replaced with someone else with a potential to deceive or cause harm.
+
+--> Synthetic audio especially the ones that clone human speech pose a threat.
+
+--> Currently, there are no tools that allow one to distinguish between real and fake audio, the security threat of synthetic audio is high.
+
+--> Text synthesis uses systems to transform data into natural language.
+
+--> The challenges to information security is not limited to creation of human like artificial content but also the ability of ai systems to recognize patterns, predict behaviour of users, target specific user base with specific content, and artificially amplify and promote content through bots.
+
+--> Deep learning is a class of machine learning where multilayered algorithms like advanced neural networks are used to extract patterns to make decisions or predictions.
+
+--> When such models are deployed at scale, it becomes incumbent to ethically control it.
+
+--> Some of the risks due to ai deployment are job loss due to automation; privacy and security concern due to surveillance, profiling; and socio economic inequality due to bias.
+
+--> Privacy and data protection become critical at the design stage of the ai systems.
+
+--> Users must be protected against data leaks or misclassification.
+
+--> Such applications are at risk of rogue attacks in terms of theft or malicious data injection.
+
+--> There is a continuous requirement to monitor and validate ai systems post deployment.
