@@ -15,7 +15,6 @@ binaryornot==0.4.4
 black==22.6.0
 bleach==5.0.1
 cachelib==0.9.0
-certifi @ file:///C:/Windows/TEMP/abs_e9b7158a-aa56-4a5b-87b6-c00d295b01fanefpc8_o/croots/recipe/certifi_1655968940823/work/certifi
 cffi==1.15.1
 chardet==5.0.0
 charset-normalizer==2.1.0
@@ -38,6 +37,7 @@ flake8==4.0.1
 Flask==2.2.2
 Flask-Session==0.4.0
 Flask-WTF==1.0.1
+gunicorn==20.1.0
 huggingface-hub==0.8.1
 ibm-cloud-sdk-core==3.16.0
 ibm-watson==6.1.0
