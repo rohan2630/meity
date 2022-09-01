@@ -12,6 +12,10 @@ from transformers import pipeline
 import os
 from werkzeug.utils import secure_filename
 
+from ibm_watson import SpeechToTextV1
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+import subprocess
+
 app = Flask(__name__)
 
 app.config["SESSION_PERMANENT"] = False
@@ -20,8 +24,8 @@ Session(app)
 
 UPLOAD_FOLDER = 'static/files'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['UPLOAD_EXTENSIONS'] = ['.pdf' ]
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.config['UPLOAD_EXTENSIONS'] = ['.pdf', '.mp3' ]
+app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
 app.config['SECRET_KEY'] = "supersecretkey"
 
 ALLOWED_EXTENSIONS = set(['pdf'])
@@ -30,10 +34,64 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/')
+def pilot():
+    return render_template('index.html')
+
+@app.route('/audio')
+def audio():
+    return render_template('audio.html')
+
+@app.route('/audio', methods=['POST'])
+def upload_audio():
+    
+    my_files = request.files    
+    with open('static/files/readaud.txt', 'w') as myFil:
+        myFil.write("Reached")
+    for item in my_files:
+        uploaded_file = my_files.get(item)
+        uploaded_file.filename = secure_filename(uploaded_file.filename)
+    audFiles = [val for sublist in [[os.path.join(i[0], j) for j in i[2] if j.endswith('.mp3')] for i in os.walk('./')] for val in sublist]
+    for i in audFiles:
+        os.remove(i)
+    uploaded_file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(uploaded_file.filename)))
+    
+    return redirect(url_for('audupload'))
+
+@app.route('/audupload')
+def audupload():
+
+    apikey = 'iIqfbQH_dlc6EGpEiYZ4U2u2_i1qPYN1vSre2K0erQsi'
+    url = 'https://api.au-syd.speech-to-text.watson.cloud.ibm.com/instances/fb9a94df-c40f-4822-9e49-24fac4d9bf1e'
+
+    authenticator = IAMAuthenticator(apikey)
+    stt = SpeechToTextV1(authenticator = authenticator)
+    stt.set_service_url(url)
+    
+    audFiles = [val for sublist in [[os.path.join(i[0], j) for j in i[2] if j.endswith('.mp3')] for i in os.walk('./')] for val in sublist]
+    for i in audFiles:
+        results = []
+        with open(i, 'rb') as audF:
+            res = stt.recognize(audio=audF, content_type='audio/mp3', model='en-US_NarrowbandModel', inactivity_timeout=360).get_result()
+            results.append(res)
+            
+    text = []
+    for file in results:
+        for result in file['results']:
+            text.append(result['alternatives'][0]['transcript'].rstrip() + '.\n')
+    text = ''.join(text).replace('%HESITATION', '')
+    with open('static/files/output.txt', 'w') as out:
+        out.write(text)
+    
+    # return redirect(url_for('static', filename='files/output.txt'))
+    return render_template('audoutput.html', text=text)
+
+
+
+@app.route('/home')
 def newindex():
     return render_template('newindex.html')
 
-@app.route('/', methods=['POST'])
+@app.route('/home', methods=['POST'])
 def upload_file():
     with open('static/files/read.txt', 'w') as myFi:
         myFi.write("Reached")
@@ -147,4 +205,4 @@ def upload():
     return render_template('output.html', text=text)
 
 if __name__ == '__main__':
-    app.run(port=8094, debug=True)
+    app.run(port=8096, debug=True)
